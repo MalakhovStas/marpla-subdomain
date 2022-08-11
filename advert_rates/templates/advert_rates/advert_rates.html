@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 {% with start="https://www.wildberries.ru/catalog/" end="/detail.aspx" %}
 <head>
     <meta charset="UTF-8">
     <title>Ставки рекламы</title>
 </head>
 <body>
-<b>Ставки рекламы в поиске и в карточе товара</b>:
-<form method="post" action="/">
+<h1 align="center">Ставки рекламы Wildberries</h1>
+<form method="post" align="center" action="/">
     {% csrf_token %}
     <p><input
             type="search"
@@ -15,13 +15,13 @@
             placeholder="Введите артикул товара, ссылку на товар или поисковой запрос"
             maxlength="50"
             size="50">
-        <button type="submit">найти</button></p>
+        <button type="submit"><b>найти</b></button></p>
 </form>
-<div>
-    {% for rate in text %}
-        <i><b>{{rate.number}}</b></i>
-        Позиция <a href="https://www.wildberries.ru/catalog/{{rate.product_id}}/detail.aspx">
-            {{rate.product_id}}</a> Ставка <b>{{rate.cpm}}</b> руб.<br>
+
+<div align="center" style="font-size:20px">
+    {% for position, values in result.items %}
+        Позиция: <b>{{position}}</b> артикул:  <b><a href={{values.link}}>
+        {{values.product_id}}</a></b> ставка: <b>{{values.cpm}}</b> руб.<br>
     {% endfor %}
 </div>
 </body>
