@@ -2,7 +2,7 @@ import json
 import random
 import re
 import time
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional, Union
 
 import requests
 
@@ -71,7 +71,7 @@ UA_and_PROXIES = {
 # 'https://httpbin.org/ip' - возвращает ip адрес в json формате
 
 
-def proxi_rotation(bad_proxi: Dict | None = None, stop_proxies={}) -> Tuple:
+def proxi_rotation(bad_proxi: Optional[Dict] = None, stop_proxies={}) -> Tuple:
     """
     Модуль для ротации и карантина прокси, если при вызове функции указан bad_proxi он попадает в карантин на срок,
     указанный в переменной TIME_CARANTIN_PROXI в секундах.
@@ -109,8 +109,10 @@ def func_request(url: str) -> Dict:
     return {}
 
 
-def func_response(response: Dict) -> Dict:
+def func_response(response: Dict) -> Union[Dict, List]:
     """ Формирует и отравляет ответ на запрос пользователя """
+    # answer = {}
+    answer = []
 
     if isinstance(response, Dict):
         adverts = response.get('adverts')
@@ -120,15 +122,12 @@ def func_response(response: Dict) -> Dict:
         key_id = 'nmId'
 
     if adverts and adverts != 'null':
-        answer = {}
         for number, advert in enumerate(adverts):
             product_id = advert.get(key_id)
             cpm = str("{:,.0f}".format(advert.get('cpm')).replace(",", " "))
             link = f'{LinkSTART}{product_id}{LinkEND}'
-            answer[number + 1] = {'product_id': product_id, 'cpm': cpm, 'link': link}
-
-    else:
-        return {}
+            # answer[number + 1] = {'product_id': product_id, 'cpm': cpm, 'link': link}
+            answer.append({'position': number+1, 'product_id': product_id, 'cpm': cpm, 'link': link})
 
     return answer
 
@@ -138,7 +137,9 @@ def func_search(message: str) -> Dict:
      Обработчик сообщения полученного в состоянии реклама в карточке, выделяет из сообщения номер карточки товара для
      запроса на API WB
     """
-
+    message = message.strip().lower()
+    if 'ё' in message:
+        message = message.replace('ё', 'е')
     if message.strip().isdigit() or message.strip().startswith('https:'):
 
         pattern = re.search(r'[^\/]{0,1}(\d+)[^\/]{0,1}', message)
@@ -149,7 +150,7 @@ def func_search(message: str) -> Dict:
             result = func_response(response=response)
 
         else:
-            result = {}
+            result = []
     else:
         url = WB_CATALOG + '%20'.join(message.strip().split())
         response = func_request(url=url)

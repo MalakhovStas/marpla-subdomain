@@ -38,11 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'advert_rates',
+    'corsheaders',  # Настройка CORS обязательная
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Настройка CORS обязательная
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -118,4 +120,38 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/var/work/static/'
+
+# Настройка CORS
+# Затем вы можете включить CORS для всех доменов, добавив следующий параметр:
+# CORS_ORIGIN_ALLOW_ALL = True # Если это используется, CORS_ALLOWED_ORIGINS не будет иметь никакого эффекта
+# Или только включить CORS для указанных доменов:
+# CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = [
+#     'http//:localhost:8000',
+#     'http://localhost:8080',
+#     'http://127.0.0.1:8000'
+# ]
+
+# Попробуйте добавить это в ваших настройках:
+# from corsheaders.defaults import default_headers
+#
+# CORS_ALLOW_HEADERS = default_headers + (
+#     'Access-Control-Allow-Origin',
+# )
+
+# Попробуйте удалить CORS_ALLOWED_ORIGINS. Оставьте CORS_ORIGIN_ALLOW_ALL = True.
+# Это мои настройки на реальном сервере:
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+  'accept',
+  'accept-encoding',
+  'authorization',
+  'content-type',
+  'origin',
+  'dnt',
+  'user-agent',
+  'x-csrftoken',
+  'x-requested-with']
+CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']

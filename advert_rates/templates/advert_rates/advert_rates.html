@@ -18,10 +18,10 @@
         <button type="submit"><b>найти</b></button></p>
 </form>
 
-<div align="center" style="font-size:20px">
-    {% for position, values in result.items %}
-        Позиция: <b>{{position}}</b> артикул:  <b><a href={{values.link}}>
-        {{values.product_id}}</a></b> ставка: <b>{{values.cpm}}</b> руб.<br>
+<div align="center" style="font-size:16px">
+    {% for advert in result %}
+        Позиция: <b>{{advert.position}}</b> артикул:  <b><a href={{advert.link}}>
+        {{advert.product_id}}</a></b> ставка: <b>{{advert.cpm}}</b> руб.<br>
     {% endfor %}
 </div>
 </body>

@@ -1,5 +1,4 @@
-from django.views import View
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.views import View
 
@@ -11,21 +10,22 @@ class AdvertRates(View):
         return render(request, 'advert_rates/advert_rates.html')
 
     def post(self, request):
-        result = search_requests.func_search(request.POST.get('name'))
+        req = request.POST.get('name')
+        result = search_requests.func_search(message=req)
         if not result:
             return HttpResponseRedirect('/')
         else:
             return render(request, 'advert_rates/advert_rates.html', context={'result': result})
 
 
-class AdvertRatesJson(View):
+class AdvertRatesApi(View):
     def get(self, request):
         print(request.GET)
-        name = request.GET.get('req')
-        result = search_requests.func_search(name) if name else {}
-        return JsonResponse(result)
+        req = request.GET.get('req')
+        result = search_requests.func_search(message=req) if req else {}
+        return HttpResponse(str(result))
 
     def post(self, request):
-        name = request.POST.get('req')
-        result = search_requests.func_search(name) if name else {}
-        return JsonResponse(result)
+        req = request.POST.get('req')
+        result = search_requests.func_search(message=req) if req else {}
+        return HttpResponse(str(result))
