@@ -19,10 +19,23 @@
 </form>
 
 <div align="center" style="font-size:16px">
-    {% for advert in result %}
-        Позиция: <b>{{advert.position}}</b> артикул:  <b><a href={{advert.link}}>
-        {{advert.product_id}}</a></b> ставка: <b>{{advert.cpm}}</b> руб.<br>
-    {% endfor %}
+    {% if not result %}
+        {% if queryType == 'keyword' %}
+            По этому поисковому запросу ничего не нашлось, возможно ошибка в тексте
+        {% elif queryType == 'article' %}
+            По указанному артикулу ничего не нашлось, возможно ошибка в номере<br>
+            или в карточке этого товара нет рекламных позиций
+        {% elif queryType == 'url' %}
+            По указанной ссылке ничего не нашлось, возможно ошибка в артикуле<br>
+            или в карточке этого товара нет рекламных позиций
+        {% endif %}
+    {% else %}
+        {% for advert in result %}
+            Позиция: <b>{{advert.position}}</b> артикул:  <b><a href={{advert.link}}>
+            {{advert.product_id}}</a></b> ставка: <b>{{advert.cpm}}</b> руб.<br>
+        {% endfor %}
+    {% endif %}
+
 </div>
 </body>
 {% endwith %}

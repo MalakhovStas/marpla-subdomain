@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from corsheaders.defaults import default_headers
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'an_e#tkb&nnin22d4&al#mnb0fyq9qkg2=md^33hx*)98+w6li'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # True
+DEBUG = True  # True
 
-ALLOWED_HOSTS = ['5.44.40.31', '127.0.0.1']
+ALLOWED_HOSTS = ['5.44.40.31', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -72,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'marpla_subdomain.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -82,7 +83,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -102,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -116,42 +115,34 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/var/work/static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = '/var/work/static/'
 
-# Настройка CORS
-# Затем вы можете включить CORS для всех доменов, добавив следующий параметр:
-# CORS_ORIGIN_ALLOW_ALL = True # Если это используется, CORS_ALLOWED_ORIGINS не будет иметь никакого эффекта
-# Или только включить CORS для указанных доменов:
-# CORS_ORIGIN_ALLOW_ALL = False
-# CORS_ORIGIN_WHITELIST = [
-#     'http//:localhost:8000',
-#     'http://localhost:8080',
-#     'http://127.0.0.1:8000'
-# ]
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'unsafe-none'  # Если не установленно ошибка CORS
+#SESSION_COOKIE_SAMESITE = None
+#SECURE_REFERRER_POLICY = 'unsafe-url' # с этим post не видит csrf_key
 
-# Попробуйте добавить это в ваших настройках:
-# from corsheaders.defaults import default_headers
-#
-# CORS_ALLOW_HEADERS = default_headers + (
-#     'Access-Control-Allow-Origin',
-# )
 
-# Попробуйте удалить CORS_ALLOWED_ORIGINS. Оставьте CORS_ORIGIN_ALLOW_ALL = True.
-# Это мои настройки на реальном сервере:
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True  # Добавляет заголовок "Access-Control-Allow-Headers: * "
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [
-  'accept',
-  'accept-encoding',
-  'authorization',
-  'content-type',
-  'origin',
-  'dnt',
-  'user-agent',
-  'x-csrftoken',
-  'x-requested-with']
-CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
+
+#CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:3000/', 'http://localhost:3000', 'http://5.44.40.31:81']
+#CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+
+CORS_ALLOW_METHODS = ['OPTIONS', 'GET', 'POST']
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "Access-Control-Allow-Headers",
+    "Access-Control-Allow-Credentials",
+    "accept",
+    "accept-encoding",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "X-Amz-Date"
+]

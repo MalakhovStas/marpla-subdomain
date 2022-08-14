@@ -67,7 +67,7 @@ UA_and_PROXIES = {
         'https': f'socks5://{login_password}@23.229.125.226:9255'}}
 
 
-# pip install -U requests[socks]
+# pip install -U requests[socks] # эта библиотека нужна для работы socks5 proxi
 # 'https://httpbin.org/ip' - возвращает ip адрес в json формате
 
 
@@ -111,7 +111,6 @@ def func_request(url: str) -> Dict:
 
 def func_response(response: Dict) -> Union[Dict, List]:
     """ Формирует и отравляет ответ на запрос пользователя """
-    # answer = {}
     answer = []
 
     if isinstance(response, Dict):
@@ -126,8 +125,7 @@ def func_response(response: Dict) -> Union[Dict, List]:
             product_id = advert.get(key_id)
             cpm = str("{:,.0f}".format(advert.get('cpm')).replace(",", " "))
             link = f'{LinkSTART}{product_id}{LinkEND}'
-            # answer[number + 1] = {'product_id': product_id, 'cpm': cpm, 'link': link}
-            answer.append({'position': number+1, 'product_id': product_id, 'cpm': cpm, 'link': link})
+            answer.append({"position": number+1, "product_id": product_id, "cpm": cpm, "link": link})
 
     return answer
 
@@ -141,6 +139,7 @@ def func_search(message: str) -> Dict:
     if 'ё' in message:
         message = message.replace('ё', 'е')
     if message.strip().isdigit() or message.strip().startswith('https:'):
+        query_type = 'article' if message.strip().isdigit() else 'url'
 
         pattern = re.search(r'[^\/]{0,1}(\d+)[^\/]{0,1}', message)
         nmid = str(pattern.group(0)) if pattern else ''
@@ -152,11 +151,12 @@ def func_search(message: str) -> Dict:
         else:
             result = []
     else:
+        query_type = 'keyword'
         url = WB_CATALOG + '%20'.join(message.strip().split())
         response = func_request(url=url)
         result = func_response(response=response)
 
-    return result
+    return {'queryType': query_type, 'response': result}
 
 
 # https://www.wildberries.ru/catalog/25356409/detail.aspx
