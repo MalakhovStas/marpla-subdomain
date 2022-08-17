@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.db import models
 
 
-class TelegramUsers(models.Model):
+class TelegramUser(models.Model):
     user_id = models.IntegerField(db_index=True, verbose_name='ТГ user_id', null=False, primary_key=True)
     name = models.CharField(max_length=1000,  default='', db_index=True, verbose_name='имя')
     username = models.CharField(max_length=100, blank=True, db_index=True, verbose_name='ТГ username')
@@ -26,8 +26,8 @@ class TelegramUsers(models.Model):
         ordering = ['date_joined']
 
 
-class TelegramUsersRequests(models.Model):
-    telegram_user = models.ForeignKey('TelegramUsers', on_delete=models.CASCADE, related_name='user',
+class TelegramUserRequest(models.Model):
+    telegram_user = models.ForeignKey('TelegramUser', on_delete=models.CASCADE, related_name='user',
                                       verbose_name='пользователь', null=False, blank=False, default=1)
     date_request = models.DateTimeField(auto_now_add=True, db_index=True)
     type_request = models.ForeignKey('TypesRequest', on_delete=models.CASCADE, related_name='type_request',
@@ -62,3 +62,17 @@ class ResponseStatus(models.Model):
 
     class Meta:
         db_table = 'response_status'
+
+
+class WBSubject(models.Model):
+    objectId = models.IntegerField(db_index=True, verbose_name='id предмета', primary_key=True, null=False, unique=True)
+    objectName = models.CharField(max_length=300, db_index=True, verbose_name='предмет', null=False, unique=True)
+    parentId = models.IntegerField(db_index=True, verbose_name='id категории', null=False)
+    parentName = models.CharField(max_length=300, verbose_name='категория', null=False)
+    isVisible = models.CharField(max_length=50, verbose_name='isVisible', null=False)
+
+    def __str__(self):
+        return f'{self.objectId} | {self.objectName}'
+
+    class Meta:
+        db_table = 'wb_subjects'

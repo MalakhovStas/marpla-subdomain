@@ -1,0 +1,11 @@
+Сертификат успешно получен.
+Сертификат сохраняется по адресу: /etc/letsencrypt/live/marpla.site/fullchain.pem.
+Ключ сохраняется по адресу: /etc/letsencrypt/live/marpla.site/privkey.pem.
+Срок действия этого сертификата истекает 12 ноября 2022 г.
+Эти файлы будут обновлены при обновлении сертификата.
+Certbot настроил запланированную задачу для автоматического обновления этого сертификата в фоновом режиме.
+
+Развертывание сертификата
+Сертификат для marpla.site успешно развернут в /etc/nginx/sites-enabled/my_app
+Сертификат для www.marpla.site успешно развернут в /etc/nginx/sites-enabled/my_app
+Поздравляем! Вы успешно включили HTTPS на https://marpla.site и https://www.marpla.site.

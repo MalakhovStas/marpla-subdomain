@@ -31,8 +31,11 @@
         {% endif %}
     {% else %}
         {% for advert in result %}
-            Позиция: <b>{{advert.position}}</b> артикул:  <b><a href={{advert.link}}>
-            {{advert.product_id}}</a></b> ставка: <b>{{advert.cpm}}</b> руб.<br>
+            <img src={{advert.img}} width="50" height="50" alt="нет картинки">
+            Позиция: <b>{{advert.position}}</b>
+            артикул:  <b><a href={{advert.link}}>{{advert.product_id}}</a></b>
+            ставка: <b>{{advert.cpm}}</b> руб |
+    предмет: <b>{{advert.subject.name}}</b><br>
         {% endfor %}
     {% endif %}
 

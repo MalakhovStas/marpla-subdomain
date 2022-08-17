@@ -1,14 +1,14 @@
 from django.contrib import admin
-from advert_rates.models import TelegramUsers, TelegramUsersRequests, TypesRequest, ResponseStatus
+from advert_rates.models import TelegramUser, TelegramUserRequest, TypesRequest, ResponseStatus, WBSubject
 
 
-@admin.register(TelegramUsers)
-class TelegramUsersAdmin(admin.ModelAdmin):
+@admin.register(TelegramUser)
+class TelegramUserAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(TelegramUsersRequests)
-class TelegramUsersRequestsAdmin(admin.ModelAdmin):
+@admin.register(TelegramUserRequest)
+class TelegramUserRequestAdmin(admin.ModelAdmin):
     pass
 
 
@@ -21,3 +21,7 @@ class TypesRequestAdmin(admin.ModelAdmin):
 class ResponseStatusAdmin(admin.ModelAdmin):
     pass
 
+
+@admin.register(WBSubject)
+class WBSubjectAdmin(admin.ModelAdmin):
+    pass

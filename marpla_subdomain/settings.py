@@ -27,7 +27,7 @@ SECRET_KEY = 'an_e#tkb&nnin22d4&al#mnb0fyq9qkg2=md^33hx*)98+w6li'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True  # True
 
-ALLOWED_HOSTS = ['5.44.40.31', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['marpla.site', '5.44.40.31', '127.0.0.1', 'localhost']
 
 
 # Application definition
