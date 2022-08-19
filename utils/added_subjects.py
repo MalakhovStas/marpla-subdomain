@@ -44,8 +44,10 @@ def func_request(subject_name):
             if resp:
                 return resp
         except Exception as exc:
+            # print(f'Error request - restart, error : {exc}')
             print(f'\033[31mОшибка запроса - повторяю запрос\033[0m Ошибка: {exc}')
     else:
+        # print(f'Not data for subject: {subject_name}')
         print(f'\033[31mНе удалось получить данные по предмету - \033[0m{subject_name}')
         return []
 
@@ -56,7 +58,7 @@ with open('subjects_names.csv', 'r') as file:
     data = file.read().strip().split('\n')
 
 sum_add_subjects = 0
-for num, name in enumerate(data[:100]):
+for num, name in enumerate(data):
     if db.select_subject_name(objectName=name):
         print(f'{num + 1}. \033[35m{name} - \033[31mесть в базе данных , перехожу к следующему\033[0m')
         continue

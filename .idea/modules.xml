@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../marpla_subdomain/.idea/marpla_subdomain.iml" filepath="$PROJECT_DIR$/../marpla_subdomain/.idea/marpla_subdomain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/marpla_subdomain.iml" filepath="$PROJECT_DIR$/.idea/marpla_subdomain.iml" />
     </modules>
   </component>
 </project>

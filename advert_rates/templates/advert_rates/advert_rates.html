@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
 {% with start="https://www.wildberries.ru/catalog/" end="/detail.aspx" %}
 <head>
     <meta charset="UTF-8">
@@ -31,7 +31,7 @@
         {% endif %}
     {% else %}
         {% for advert in result %}
-            <img src={{advert.img}} width="50" height="50" alt="нет картинки">
+        <a href={{advert.img}}><img src={{advert.img}} width="24.6" height="32.8" alt="нет картинки"></a>
             Позиция: <b>{{advert.position}}</b>
             артикул:  <b><a href={{advert.link}}>{{advert.product_id}}</a></b>
             ставка: <b>{{advert.cpm}}</b> руб |

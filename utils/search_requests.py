@@ -1,28 +1,46 @@
 import json
+import os
 import re
 from typing import Dict, List, Union
 
 import requests
-
 from advert_rates.models import WBSubject
-from utils.proxi_rotation import func_proxi_rotation
+from utils.proxi_rotation import func_proxi_rotation, PROXIES_Status
 from utils.utils_config import LinkSTART, LinkEND, WB_CAROUSEL, WB_CATALOG
+# from urllib3.exceptions import InsecureRequestWarning
+# import ssl
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def func_request(url: str) -> Dict:
     """ Запрашивает данные с API сайта(url), в случае успеха возвращает полученное сообщение в виде словаря или списка,
         в противном случае возвращает пустой словарь и отправляет сообщение об ошибке запроса администраторам """
+    # ssl._create_default_https_context = ssl._create_unverified_context
 
-    user_agent, proxi = func_proxi_rotation()
+    headers, proxi = func_proxi_rotation()
 
-    for step in range(1, 4):
+    for step in range(1, 3):
         if step > 1:
-            user_agent, proxi = func_proxi_rotation(bad_proxi=proxi)
+            logger.warning(f'Request -> BAD -> step: {step}')
+            headers, proxi = func_proxi_rotation(bad_proxi=proxi)
+        try:
+            # requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+            requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
+            session = requests.Session()
+            session.verify = False
+            session.trust_env = False
+            os.environ['CURL_CA_BUNDLE'] = ""
+            response_api = session.get(url=url, headers=headers, proxies=proxi, timeout=20)
 
-        response_api = requests.get(url=url, headers={'User-Agent': user_agent}, proxies=proxi)
+        except Exception as exc:
+            response_api = None
+            logger.error(f'Request EXCEPTION: {exc} {exc.__class__}')
 
-        if response_api.status_code == requests.codes.ok and response_api.text:
-            # print(response_api.text)
+        PROXIES_Status.remove(proxi)
+        if response_api and response_api.status_code == requests.codes.ok and response_api.text:
+            logger.info(f'Request -> OK in step: {step}')
             return json.loads(response_api.text)
 
     return {}
@@ -126,7 +144,6 @@ def func_response(response: Dict) -> Union[Dict, List]:
 
     if isinstance(response, Dict):
         adverts = response.get('adverts')
-        # prioritySubjects = response.get('prioritySubjects')
         key_id = 'id'
         subject_key = 'subject'
     else:
